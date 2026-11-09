@@ -1,0 +1,47 @@
+{
+  "name": "huji-skills",
+  "owner": {
+    "name": "Hebrew University AI portal"
+  },
+  "metadata": {
+    "description": "Agent skills from the Hebrew University of Jerusalem"
+  },
+  "plugins": [
+    {
+      "name": "huji-ai-guide",
+      "description": "Find information, tools and skills for your task, read current sources and identify the guidance that applies.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/huji-ai-guide"
+      ]
+    },
+    {
+      "name": "huji-phd",
+      "description": "Find the Authority for Research Students' rules, forms and deadlines for each stage of a PhD, from applying to submitting the dissertation, from the current pages of its website.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/huji-phd"
+      ]
+    },
+    {
+      "name": "huji-shnaton",
+      "description": "Search the Hebrew University course catalogue for courses, class times and exam dates, prerequisites and degree requirements by start year, and check a timetable for clashes.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/huji-shnaton"
+      ]
+    },
+    {
+      "name": "moriah-cluster",
+      "description": "Registering, connecting to and working with HURCS's Moriah cluster, including GPUs, storage and costs, and what to know before giving an AI agent access to it.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/moriah-cluster"
+      ]
+    }
+  ]
+}
