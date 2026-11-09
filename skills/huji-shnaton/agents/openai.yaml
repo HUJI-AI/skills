@@ -1,0 +1,3 @@
+interface:
+  display_name: 'The Shnaton: courses, requirements and timetables'
+  short_description: Search the Hebrew University course catalogue for courses, class times and exam dates, prerequisites and degree requirements by start year, and check a timetable for clashes.

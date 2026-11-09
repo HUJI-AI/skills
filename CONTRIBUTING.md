@@ -21,8 +21,11 @@ portal's index for agents. Write every file as a public page.
    Keep `metadata` flat (no nested lists or maps), as the standard requires.
 4. Write the instructions below the front matter. Link to the skill's own
    files relative to its folder, such as `[API](references/api.md)`.
-5. Run `uv run scripts/check.py --write`. It checks the skill and adds it to
-   the README catalogue and the marketplace.
+5. Run `uv run scripts/check.py --write`. It checks the skill, adds it to the
+   README catalogue and the Claude Code and Codex marketplaces, and writes its
+   `agents/openai.yaml` from the English title and summary. You may add other
+   Codex settings to that file (such as `policy` or `dependencies`); the
+   check keeps them.
 6. Open a pull request to `main`. A maintainer reviews it.
 
 ## What does not belong here

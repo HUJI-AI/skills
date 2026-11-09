@@ -1,0 +1,3 @@
+interface:
+  display_name: Working with the Moriah computing cluster
+  short_description: Registering, connecting to and working with HURCS's Moriah cluster, including GPUs, storage and costs, and what to know before giving an AI agent access to it.

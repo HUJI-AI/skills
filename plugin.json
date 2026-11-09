@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "huji-skills",
+  "version": "1.0.0+84c684f0f388",
+  "description": "Agent skills from the Hebrew University of Jerusalem"
+}

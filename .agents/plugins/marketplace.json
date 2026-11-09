@@ -1,0 +1,20 @@
+{
+  "name": "huji-skills",
+  "interface": {
+    "displayName": "Hebrew University skills"
+  },
+  "plugins": [
+    {
+      "name": "huji-skills",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Education"
+    }
+  ]
+}

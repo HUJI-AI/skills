@@ -5,13 +5,17 @@
 """Check the skills and keep the generated parts of the repository current.
 
     uv run scripts/check.py           check; exit 1 with the problems found
-    uv run scripts/check.py --write   also rewrite the README catalogue and
-                                      .claude-plugin/marketplace.json
+    uv run scripts/check.py --write   also rewrite the generated files: the
+                                      README catalogue, each skill's
+                                      agents/openai.yaml (Codex and ChatGPT),
+                                      the Claude Code marketplace and the
+                                      Codex plugin and marketplace
 
 The AI portal (https://ai.huji.ac.il/) reads these skills from main when it is
 built, and stops on the same rules, so a skill that passes here publishes.
 """
 
+import hashlib
 import json
 import re
 import sys
@@ -23,6 +27,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 README = ROOT / "README.md"
 MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
+CODEX_PLUGIN = ROOT / "plugin.json"
+CODEX_MARKETPLACE = ROOT / ".agents" / "plugins" / "marketplace.json"
 SITE = "https://ai.huji.ac.il/"
 
 PILLARS = {
@@ -83,6 +89,8 @@ def check_skill(folder: Path) -> tuple[dict | None, list[str]]:
         inner = path.relative_to(folder)
         if path.is_symlink():
             problems.append(f"{rel}/{inner}: no symbolic links; copy the file in")
+        elif inner.as_posix() == "agents/openai.yaml":
+            continue  # Codex's metadata, partly generated: see openai_yaml()
         elif any(part.startswith(("_", ".")) for part in inner.parts):
             # Everything here is public: maintainer notes stay out of the repository.
             problems.append(f"{rel}/{inner}: files starting with _ or . don't belong in a public skill")
@@ -97,6 +105,57 @@ def catalogue(skills: list[dict]) -> str:
         rows.append(f"| [{title}](skills/{s['name']}/) · [on the portal]({SITE}skills/{s['name']}/) "
                     f"| {PILLARS[s['pillar']]} | {summary} |")
     return "\n".join(rows + ["", END])
+
+
+def openai_yaml(skill: dict) -> str:
+    """agents/openai.yaml, which Codex and the ChatGPT apps read for how a
+    skill appears. The name and short description come from the English
+    metadata; other keys a contributor adds (policy, dependencies, icons) are
+    kept."""
+    path = SKILLS / skill["name"] / "agents" / "openai.yaml"
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else None
+    data = data if isinstance(data, dict) else {}
+    interface = data.get("interface") if isinstance(data.get("interface"), dict) else {}
+    interface.update(display_name=skill.get("title_en") or skill["title"],
+                     short_description=skill.get("summary_en") or skill["summary"])
+    data = {"interface": interface, **{k: v for k, v in data.items() if k != "interface"}}
+    return yaml.safe_dump(data, allow_unicode=True, sort_keys=False, width=1000)
+
+
+def content_version() -> str:
+    """1.0.0+<hash of the skills>: Codex caches an installed plugin by its
+    version, so any change to a skill gives the plugin a new one."""
+    digest = hashlib.sha256()
+    for path in sorted(p for p in SKILLS.rglob("*") if p.is_file()):
+        rel = path.relative_to(SKILLS).as_posix()
+        if rel.endswith("/agents/openai.yaml"):
+            continue  # generated from SKILL.md, which is already counted
+        digest.update(rel.encode() + b"\0" + path.read_bytes() + b"\0")
+    return f"1.0.0+{digest.hexdigest()[:12]}"
+
+
+def codex_plugin() -> str:
+    """The whole repository as one Codex plugin: Codex finds the skills in
+    skills/ at the plugin root."""
+    return json.dumps({
+        "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+        "name": "huji-skills",
+        "version": content_version(),
+        "description": "Agent skills from the Hebrew University of Jerusalem",
+    }, indent=2) + "\n"
+
+
+def codex_marketplace() -> str:
+    return json.dumps({
+        "name": "huji-skills",
+        "interface": {"displayName": "Hebrew University skills"},
+        "plugins": [{
+            "name": "huji-skills",
+            "source": {"source": "local", "path": "./"},
+            "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+            "category": "Education",
+        }],
+    }, indent=2) + "\n"
 
 
 def marketplace(skills: list[dict]) -> str:
@@ -135,11 +194,13 @@ def main() -> int:
         print(f"README.md: keep the {BEGIN} and {END} markers", file=sys.stderr)
         return 1
     start, end = readme.index(BEGIN), readme.index(END) + len(END)
-    expected = {README: readme[:start] + catalogue(skills) + readme[end:], MARKETPLACE: marketplace(skills)}
+    expected = {README: readme[:start] + catalogue(skills) + readme[end:], MARKETPLACE: marketplace(skills),
+                CODEX_PLUGIN: codex_plugin(), CODEX_MARKETPLACE: codex_marketplace()}
+    expected.update({SKILLS / s["name"] / "agents" / "openai.yaml": openai_yaml(s) for s in skills})
     stale = [p for p, text in expected.items() if not p.exists() or p.read_text(encoding="utf-8") != text]
     if stale and write:
         for path in stale:
-            path.parent.mkdir(exist_ok=True)
+            path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(expected[path], encoding="utf-8")
             print(f"updated {path.relative_to(ROOT)}")
     elif stale:
