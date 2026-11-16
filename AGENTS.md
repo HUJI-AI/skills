@@ -13,3 +13,4 @@ public skill that the AI portal (https://ai.huji.ac.il/skills/) publishes from
   marketplaces and `plugin.json`). Skills must work in Claude Code, Codex and
   other Agent Skills apps: keep to the standard's fields.
 - Work on a branch and open a pull request to `main`; don't push to `main`.
+  GitHub Actions runs `scripts/check.py` on each pull request.

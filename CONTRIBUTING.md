@@ -1,12 +1,12 @@
 # Contributing a skill
 
-Everything in this repository is published: on the AI portal
+Everything in this repository is public: here on GitHub and on the AI portal
 (<https://ai.huji.ac.il/skills/>), as raw files, in each skill's zip and in the
 portal's index for agents. Write every file as a public page.
 
 ## Add a skill
 
-1. Branch from `main`.
+1. Fork the repository (with write access, branch from `main` instead).
 2. Copy `template/` to `skills/<name>/`. The name is lowercase letters, digits
    and hyphens, and `name` in `SKILL.md` must be the same.
 3. Fill in the front matter:
@@ -26,7 +26,8 @@ portal's index for agents. Write every file as a public page.
    `agents/openai.yaml` from the English title and summary. You may add other
    Codex settings to that file (such as `policy` or `dependencies`); the
    check keeps them.
-6. Open a pull request to `main`. A maintainer reviews it.
+6. Open a pull request to `main`. GitHub runs the check on it, and a
+   maintainer reviews it.
 
 ## What does not belong here
 
@@ -47,8 +48,8 @@ The portal fetches `main` of this repository each time it is built and stops
 if a skill breaks the rules above, so run the check before you open a pull
 request. A merged change appears on the portal with the next publish.
 
-To preview a branch on the portal before merging, build the portal with this
-checkout:
+Maintainers can preview a branch on the portal before merging by building the
+portal (its own repository) with this checkout:
 
 ```
 HUJI_SKILLS_DIR=/path/to/huji-skills uv run build.py serve

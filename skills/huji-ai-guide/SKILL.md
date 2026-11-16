@@ -92,16 +92,15 @@ If no listed skill fits, use relevant guidance where it helps and say that no
 matching published skill was found. Do not invent a skill or install the
 whole catalogue.
 
-The site's skills are published from the
-[huji-skills repository](https://github.cs.huji.ac.il/hurcs-center/huji-skills),
-where they are maintained. Reading it requires signing in to
-github.cs.huji.ac.il, so read and install from the site's copies unless the
-user already works with that repository. Skill installers can list the site's
+The site's skills are published from the public
+[HUJI-AI/skills repository](https://github.com/HUJI-AI/skills), where they are
+maintained. Read and install them from the site's copies, or from the
+repository when the user works with it. Skill installers can list the site's
 copies through its discovery index,
 `https://ai.huji.ac.il/.well-known/agent-skills/index.json`. When the user
 wants to propose a new skill or a change to one, point them to the
 repository's
-[contribution instructions](https://github.cs.huji.ac.il/hurcs-center/huji-skills/blob/main/CONTRIBUTING.md).
+[contribution instructions](https://github.com/HUJI-AI/skills/blob/main/CONTRIBUTING.md).
 
 ## In a web chat
 

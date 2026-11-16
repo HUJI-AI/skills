@@ -36,26 +36,25 @@ any scripts or reference files it needs. The format is the open
 Most people should start from the portal: each skill's page explains what it
 does and links to its zip, and [the install guide](https://ai.huji.ac.il/skills/#install)
 covers each agent app. Agents can find every skill through
-<https://ai.huji.ac.il/llms.txt>. The portal's copies are public; this
-repository requires signing in to `github.cs.huji.ac.il`.
+<https://ai.huji.ac.il/llms.txt>.
 
 Read a skill before installing it. A skill gives an agent instructions and may
 include code it runs on your computer.
 
-With access to this repository you can install from it directly.
+You can also install straight from this repository.
 
 ### Claude Code
 
 The repository is a Claude Code plugin marketplace with one plugin per skill:
 
 ```
-/plugin install moriah-cluster --marketplace https://github.cs.huji.ac.il/hurcs-center/huji-skills.git
+/plugin install moriah-cluster --marketplace HUJI-AI/skills
 ```
 
 Or add the marketplace once and install by name:
 
 ```
-/plugin marketplace add https://github.cs.huji.ac.il/hurcs-center/huji-skills.git
+/plugin marketplace add HUJI-AI/skills
 /plugin install moriah-cluster@huji-skills
 ```
 
@@ -66,7 +65,7 @@ The repository is also a Codex plugin marketplace
 every skill:
 
 ```
-codex plugin marketplace add https://github.cs.huji.ac.il/hurcs-center/huji-skills.git
+codex plugin marketplace add HUJI-AI/skills
 codex plugin add huji-skills@huji-skills
 ```
 
@@ -86,7 +85,7 @@ Copy `skills/<name>/` into the agent's skills folder, such as
 Products and services (an agent on a cluster, a course assistant) can fetch
 the skills in two ways:
 
-- **From the portal, without signing in.** The portal publishes an
+- **From the portal.** The portal publishes an
   [Agent Skills discovery index](https://github.com/cloudflare/agent-skills-discovery-rfc)
   at <https://ai.huji.ac.il/.well-known/agent-skills/index.json>: for each skill
   its `name`, `description`, the URL of its `SKILL.md` (a skill with no other
@@ -95,10 +94,11 @@ the skills in two ways:
   changed. <https://ai.huji.ac.il/skills-revision.txt> names the commit of
   this repository the portal last published. The portal follows `main` with
   each publish, so it can lag a merge.
-- **From this repository, with Git.** Clone or fetch `main`, or pin a commit.
-  A service needs credentials for `github.cs.huji.ac.il`, such as a read-only
-  deploy key. Every skill is `skills/<name>/` with a `SKILL.md`;
-  `scripts/check.py` keeps them to the standard.
+- **From this repository.** Clone or fetch `main`
+  (`https://github.com/HUJI-AI/skills.git`), or pin a commit; no account is
+  needed. Every skill is `skills/<name>/` with a `SKILL.md`, and
+  `scripts/check.py` keeps them to the standard. `main` changes only through
+  reviewed pull requests that pass the check.
 
 A skill's folder name is its `name` and stays the same, so products can refer
 to it.
@@ -123,4 +123,5 @@ for is written in its `metadata.pillar`, not in the folder structure.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). In short: branch, add or change a
 skill, run `uv run scripts/check.py --write`, and open a pull request to
-`main`. Once it is merged, the next build of the portal publishes it.
+`main`. GitHub runs the check on every pull request. Once it is merged, the
+next build of the portal publishes it.
