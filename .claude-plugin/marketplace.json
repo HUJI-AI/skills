@@ -1,10 +1,10 @@
 {
   "name": "huji-skills",
   "owner": {
-    "name": "Hebrew University AI portal"
+    "name": "HUJI AI"
   },
   "metadata": {
-    "description": "Agent skills from the Hebrew University of Jerusalem"
+    "description": "Agent skills and connectors from the Hebrew University of Jerusalem"
   },
   "plugins": [
     {

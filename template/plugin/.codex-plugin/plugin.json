@@ -1,0 +1,9 @@
+{
+  "name": "connector-name",
+  "description": "One sentence in English: what the connector reaches and who it is for.",
+  "interface": {
+    "displayName": "Connector name",
+    "shortDescription": "One short line for the Codex and ChatGPT plugin list",
+    "category": "Education"
+  }
+}
