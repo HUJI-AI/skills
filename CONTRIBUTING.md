@@ -1,4 +1,4 @@
-# Contributing a skill
+# Contributing a skill or a connector
 
 Everything in this repository is public: here on GitHub and on the AI portal
 (<https://ai.huji.ac.il/skills/>), as raw files, in each skill's zip and in the
@@ -7,7 +7,7 @@ portal's index for agents. Write every file as a public page.
 ## Add a skill
 
 1. Fork the repository (with write access, branch from `main` instead).
-2. Copy `template/` to `skills/<name>/`. The name is lowercase letters, digits
+2. Copy `template/skill/` to `skills/<name>/`. The name is lowercase letters, digits
    and hyphens, and `name` in `SKILL.md` must be the same.
 3. Fill in the front matter:
    - `description`: in English, for the agent. It decides when the agent
@@ -28,6 +28,35 @@ portal's index for agents. Write every file as a public page.
    check keeps them.
 6. Open a pull request to `main`. GitHub runs the check on it, and a
    maintainer reviews it.
+
+## Add a connector
+
+A connector gives agents access to a service through its MCP server. It is a
+plugin in `plugins/<name>/` that Claude Code and Codex install from the same
+folder. Propose one only for a server that its owners run for the university
+and agree to have listed here.
+
+1. Fork the repository, or branch from `main`.
+2. Copy `template/plugin/` to `plugins/<name>/`, and replace `connector-name`
+   with the name everywhere: in both manifests and in `.mcp.json`.
+3. In `.mcp.json`, set the server's `https://` address. Only remote servers
+   are accepted: a connector never runs a program on the user's computer. If
+   the server needs a key in a header, write a `${...}` placeholder, never the
+   key itself.
+4. In `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`, write the
+   description in English. In the Codex one, also the name and short line
+   that Codex and ChatGPT show.
+5. Fill in `README.md`: what the connector reaches, who runs the server, how
+   people sign in, its privacy policy and who maintains it.
+6. Optionally, keep `skills/connector-name/` (renamed) to teach the agent when
+   and how to use the server's tools; delete it otherwise.
+7. Run `uv run scripts/check.py --write`. It checks the connector, writes the
+   manifests' versions, and adds it to the README and both marketplaces.
+8. Open a pull request to `main`.
+
+Before merging, a maintainer checks that the server's owners agreed, that it
+works in both Claude Code and Codex, and that it asks for no more access than
+it needs.
 
 ## What does not belong here
 

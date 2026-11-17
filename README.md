@@ -1,4 +1,4 @@
-# HUJI agent skills
+# HUJI agent skills and connectors
 
 <div dir="rtl">
 
@@ -18,6 +18,10 @@ A skill is a folder with a `SKILL.md` file: instructions that teach an AI agent
 any scripts or reference files it needs. The format is the open
 [Agent Skills standard](https://agentskills.io/specification).
 
+A connector gives an agent access to a university service through the
+service's MCP server. Each one is a plugin that Claude Code and Codex install
+from the same folder.
+
 ## Catalogue
 
 <!-- catalogue:begin -->
@@ -30,6 +34,20 @@ any scripts or reference files it needs. The format is the open
 | [Use HUJI's AI site](skills/huji-ai-guide/) · [on the portal](https://ai.huji.ac.il/skills/huji-ai-guide/) | General | Find information, tools and skills for your task, read current sources and identify the guidance that applies. |
 
 <!-- catalogue:end -->
+
+## Connectors
+
+<!-- connectors:begin -->
+
+No connectors yet.
+
+<!-- connectors:end -->
+
+Install a connector as a plugin, by its name:
+`/plugin install <name>@huji-skills` in Claude Code, or
+`codex plugin add <name>@huji-skills` in Codex, once the marketplace is added
+(below). If the service needs a sign-in, the app asks for it the first time
+the connector is used.
 
 ## Using a skill
 
@@ -109,7 +127,12 @@ to it.
 skills/<name>/SKILL.md             one folder per skill, named as its `name`
 skills/<name>/...                  its scripts/, references/ and other files
 skills/<name>/agents/openai.yaml   how Codex and ChatGPT show it (generated)
-template/SKILL.md                  a starting point for a new skill
+plugins/<name>/.mcp.json           a connector's MCP server, for both apps
+plugins/<name>/.claude-plugin/     its Claude Code manifest
+plugins/<name>/.codex-plugin/      its Codex manifest
+plugins/<name>/README.md           what it reaches, who runs it, sign-in, privacy
+plugins/<name>/skills/             optional: how to use its tools
+template/skill/, template/plugin/  starting points for a skill and a connector
 scripts/check.py                   checks every skill; writes the generated files
 .claude-plugin/marketplace.json    the Claude Code marketplace (generated)
 .agents/plugins/marketplace.json   the Codex marketplace (generated)
@@ -122,6 +145,6 @@ for is written in its `metadata.pillar`, not in the folder structure.
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). In short: branch, add or change a
-skill, run `uv run scripts/check.py --write`, and open a pull request to
+skill or connector, run `uv run scripts/check.py --write`, and open a pull request to
 `main`. GitHub runs the check on every pull request. Once it is merged, the
 next build of the portal publishes it.

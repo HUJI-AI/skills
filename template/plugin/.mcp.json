@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "connector-name": {
+      "type": "http",
+      "url": "https://mcp.example.org/mcp"
+    }
+  }
+}
